@@ -36,7 +36,7 @@ const sendRecoverRoute = createRoute({
 
 const verifyRoute = createRoute({
   getParentRoute: () => authRoute,
-  path: "/verify",
+  path: "/verify/:email",
   component: VerifyPage
 });
 

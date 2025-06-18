@@ -4,7 +4,7 @@ export const apiRoutes = {
   login: () => `${server}/auth/login`,
   register: () => `${server}/auth/register`,
   sendEmail: () => `${server}/auth/send`,
-  recover: () => `${server}/auth/recover`,
+  changePassword: () => `${server}/auth/change-password`,
   verify: () => `${server}/auth/verify`,
 }
 

@@ -1,5 +1,5 @@
 import "../../index.css";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Label } from "../../components/ui/label";
 import {
   Card,
@@ -31,10 +31,13 @@ export default function RegisterPage() {
   const methods = useForm<RegisterFormData>();
   const password = methods.watch("password");
 
+  const router = useRouter();
+
   const registerMutation = useMutation({
     mutationFn: AuthController.register,
     onSuccess: (data) => {
       console.log(data);
+      router.navigate({ to: "/auth/login" });
     },
     onError: (error) => {
       console.error(error);

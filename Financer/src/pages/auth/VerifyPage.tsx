@@ -6,16 +6,34 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import { useRouter } from "@tanstack/react-router";
+import { useRouter, useParams } from "@tanstack/react-router";
 import { Button } from "../../components/ui/button";
 import { OtpInput } from "../../components/app/OtpInput";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import AuthController from "../../api/AuthController";
 
 export default function VerifyPage() {
-  const handleOtpChange = (otp: string) => {
-    console.log("OTP entered:", otp);
-  };
+  const [otp, setOtp] = useState<string>("");
+
   const router = useRouter();
+  const params = useParams({ from: router });
+
+  const handleOtpChange = (otp: string) => {
+    setOtp(otp);
+  };
+
+  const verifyCodeMutation = useMutation({
+    mutationFn: AuthController.VerifyCode,
+    onSuccess: (data) => {
+      console.log("Verification successful:", data);
+      router.navigate({ to: "/auth/change-password" });
+    },
+    onError: (error) => {
+      console.error("Error:", error);
+    },
+  });
   return (
     <motion.div
       layout
@@ -39,7 +57,7 @@ export default function VerifyPage() {
             layout
             onSubmit={(e) => {
               e.preventDefault();
-              router.navigate({ to: "/auth/change-password" });
+              verifyCodeMutation.mutate({ email: params.email, code: otp });
             }}
             className="space-y-4"
           >

@@ -12,6 +12,8 @@ interface InputFieldProps {
   className?: string;
   required?: boolean | string;
   validate?: any;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function InputField({
@@ -23,6 +25,8 @@ export function InputField({
   className = "",
   required,
   validate,
+  value,
+  onChange,
 }: InputFieldProps) {
   const {
     register,
@@ -46,6 +50,8 @@ export function InputField({
           placeholder={placeholder}
           className={`pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20 transition-all duration-200 ${className}`}
           {...register(name, { required, validate })}
+          value={value}
+          onChange={onChange}
         />
       </div>
       {errors[name] && (

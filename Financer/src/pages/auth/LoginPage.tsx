@@ -1,5 +1,5 @@
 import "../../index.css";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Label } from "../../components/ui/label";
 import {
   Card,
@@ -27,11 +27,13 @@ interface LoginInputs {
 export default function LoginPage() {
 
   const form = useForm<LoginInputs>();
+  const router = useRouter();
 
   const loginMutation = useMutation({
     mutationFn: AuthController.login,
     onSuccess: (data) => {
       console.log(data);
+      router.navigate({ to: "/auth/login" });
     },
     onError: (error) => {
       console.error(error);

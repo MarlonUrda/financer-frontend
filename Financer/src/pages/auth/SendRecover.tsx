@@ -1,6 +1,5 @@
 import "../../index.css";
 import { Link } from "@tanstack/react-router";
-import { Label } from "../../components/ui/label";
 import {
   Card,
   CardContent,
@@ -9,13 +8,28 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 import { useRouter } from "@tanstack/react-router";
-import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Mail } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import AuthController from "../../api/AuthController";
+import { InputField } from "../../components/app/FormInput";
 
 export default function SendRecoverPage() {
   const router = useRouter();
+  const [email, setEmail] = useState<string>("");
+
+  const sendEmailMutation = useMutation({
+    mutationFn: AuthController.SendEmail,
+    onSuccess: (data) => {
+      console.log(data);
+      router.navigate({ to: "/auth/verify/$email", params: { email } });
+    },
+    onError: (error) => {
+      console.error("Error:", error);
+    },
+  });
 
   return (
     <motion.div
@@ -40,24 +54,23 @@ export default function SendRecoverPage() {
             layout
             onSubmit={(e) => {
               e.preventDefault();
-              router.navigate({ to: "/auth/verify" });
+              sendEmailMutation.mutate({ email });
             }}
             className="space-y-4"
           >
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-300 font-bold ml-5">
-                Email
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your@gmail.com"
-                  className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20 transition-all duration-200"
-                  required
-                />
-              </div>
+              <InputField
+                label="Email"
+                type="email"
+                name="email"
+                placeholder="your@gmail.com"
+                icon={
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                }
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
 
             <Button

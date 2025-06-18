@@ -35,3 +35,53 @@ export const RegisterResponseSchema = z.object({
 });
 
 export type RegisterResponse = z.infer<typeof RegisterResponseSchema>;
+
+export interface SendEmailRequest {
+  email: string;
+}
+
+export const SendEmailResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string().min(2).max(100),
+  code: z.number(),
+});
+
+export type SendEmailResponse = z.infer<typeof SendEmailResponseSchema>;
+
+export interface VerifyEmailRequest {
+  email: string;
+}
+
+export const VerifyEmailResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string().min(2).max(100),
+  code: z.number(),
+});
+
+export type VerifyEmailResponse = z.infer<typeof VerifyEmailResponseSchema>;
+
+export interface VerifyCodeRequest {
+  code: string;
+  email: string;
+}
+
+export const VerifyCodeResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string().min(2).max(100),
+  code: z.number(),
+});
+
+export type VerifyCodeResponse = z.infer<typeof VerifyCodeResponseSchema>;
+
+export interface ChangePasswordRequest {
+  new_password: string;
+  email: string;
+}
+
+export const ChangePasswordResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string().min(2).max(100),
+  code: z.number(),
+});
+
+export type ChangePasswordResponse = z.infer<typeof ChangePasswordResponseSchema>;
