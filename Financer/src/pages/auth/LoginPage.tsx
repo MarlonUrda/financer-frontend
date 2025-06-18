@@ -8,15 +8,40 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import { ArrowRight, Eye, Lock, Mail } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight } from "lucide-react";
+
 import { Checkbox } from "../../components/ui/checkbox";
-import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Separator } from "../../components/ui/separator";
+import { FormProvider, useForm } from "react-hook-form";
+import { InputField } from "../../components/app/FormInput";
+import { PasswordField } from "../../components/app/PasswordInput";
+import { useMutation } from "@tanstack/react-query";
+import AuthController from "../../api/AuthController";
+
+interface LoginInputs {
+  email: string,
+  password: string,
+}
 
 export default function LoginPage() {
-  const [visible, setVisible] = useState(false);
+
+  const form = useForm<LoginInputs>();
+
+  const loginMutation = useMutation({
+    mutationFn: AuthController.login,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.error(error);
+    }
+  })
+
+  const onSubmit = form.handleSubmit((data) => {
+    loginMutation.mutate(data);
+  });
+
   return (
     <Card className="bg-gray-900/70 border-gray-800 backdrop-blur-sm shadow-2xl">
       <CardHeader className="space-y-1 pb-1">
@@ -25,78 +50,62 @@ export default function LoginPage() {
         </CardTitle>
         <CardDescription className="text-center text-gray-400">
           Sign in to Financer so you can keep track of your finances!
-        </CardDescription>
+        </CardDescription> 
       </CardHeader>
-      x
       <CardContent>
-        <form onSubmit={(e) => console.log(e)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-300 font-bold ml-5">
-              Email
-            </Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                id="email"
+        <FormProvider {...form}>
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <InputField
+                name="email"
+                label="Email"
                 type="email"
                 placeholder="your@gmail.com"
-                className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20 transition-all duration-200"
-                required
+                required="Please enter your email."
               />
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-300 font-bold ml-5">
-              Password
-            </Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                id="password"
-                type={visible ? "text" : "password"}
+            <div className="space-y-2">
+              <PasswordField
+                name="password"
+                label="Password"
                 placeholder="••••••••"
-                className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20 transition-all duration-200"
-                required
-              />
-              <Eye
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 cursor-pointer"
-                onClick={() => setVisible(!visible)}
+                required="Please enter your password."
               />
             </div>
-          </div>
 
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="remember"
-                  className="border-gray-600 data-[state=checked]:bg-yellow-400 data-[state=checked]:border-yellow-400"
-                />
-                <Label
-                  htmlFor="remember"
-                  className="text-gray-300 text-sm cursor-pointer"
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="remember"
+                    className="border-gray-600 data-[state=checked]:bg-yellow-400 data-[state=checked]:border-yellow-400"
+                  />
+                  <Label
+                    htmlFor="remember"
+                    className="text-gray-300 text-sm cursor-pointer"
+                  >
+                    Remember me
+                  </Label>
+                </div>
+                <Link
+                  to="/auth/sendRecover"
+                  className="text-medium text-yellow-400 hover:text-gray-300 font-bold transition-colors"
                 >
-                  Remember me
-                </Label>
+                  Forgot password?
+                </Link>
               </div>
-              <Link
-                to="/forgot-password"
-                className="text-medium text-yellow-400 hover:text-gray-300 font-bold transition-colors"
-              >
-                Forgot password?
-              </Link>
             </div>
-          </div>
 
-          <Button
-            type="submit"
-            className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold py-3 hover:from-yellow-500 hover:to-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
-          >
-            Log In
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold py-3 hover:from-yellow-500 hover:to-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Log In
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </form>
+        </FormProvider>
         <div className="relative mt-7">
           <Separator className="bg-gray-700" />
           <div className="absolute inset-0 flex items-center justify-center">

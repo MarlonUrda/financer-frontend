@@ -8,16 +8,51 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import { Eye, Lock, Mail } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight, Mail, Phone } from "lucide-react";
 import { Checkbox } from "../../components/ui/checkbox";
-import { Input } from "../../components/ui/input";
 import { PasswordStrength } from "../../components/app/password-strength";
 import { motion } from "framer-motion";
+import { Button } from "../../components/ui/button";
+import { InputField } from "../../components/app/FormInput";
+import { useForm, FormProvider } from "react-hook-form";
+import { PasswordField } from "../../components/app/PasswordInput";
+import AuthController from "../../api/AuthController";
+import { useMutation } from "@tanstack/react-query";
+
+interface RegisterFormData {
+  email: string;
+  fname: string;
+  lname: string;
+  phone: string;
+  password: string;
+}
 
 export default function RegisterPage() {
-  const [visible, setVisible] = useState(false);
-  const [password, setPassword] = useState("");
+  const methods = useForm<RegisterFormData>();
+  const password = methods.watch("password");
+
+  const registerMutation = useMutation({
+    mutationFn: AuthController.register,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const onSubmit = methods.handleSubmit((data) => {
+    console.log(data);
+    const { fname, lname, email, phone, password } = data;
+    registerMutation.mutate({
+      fname: fname,
+      lname: lname,
+      email: email,
+      phone: phone,
+      password: password,
+      role_id: 2,
+    });
+  });
 
   return (
     <motion.div
@@ -38,128 +73,124 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <motion.form
-            layout
-            onSubmit={(e) => {
-              e.preventDefault();
-              // handle submit
-            }}
-            className="space-y-4"
-          >
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-300 font-medium">
-                Email
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  id="email"
+          <FormProvider {...methods}>
+            <motion.form
+              layout
+              onSubmit={(e) => {
+                e.preventDefault();
+                onSubmit();
+              }}
+              className="flex flex-col gap-8"
+            >
+              <div className="space-y-2">
+                <InputField
+                  name="email"
+                  label="Email"
                   type="email"
+                  icon={
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  }
                   placeholder="your@gmail.com"
-                  className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20 transition-all duration-200"
-                  required
+                  required="Please enter your email."
+                />
+                <div className="mt-8 flex space-x-4">
+                  <div className="w-1/2">
+                    <InputField
+                      name="fname"
+                      label="First Name"
+                      type="text"
+                      placeholder="First Name"
+                      required="Please enter your first name."
+                    />
+                  </div>
+                  <div className="w-1/2 ">
+                    <InputField
+                      name="lname"
+                      label="Last Name"
+                      type="text"
+                      placeholder="Last Name"
+                      required="Please enter your last name."
+                    />
+                  </div>
+                </div>
+                <InputField
+                  name="phone"
+                  label="Phone"
+                  type="tel"
+                  icon={
+                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  }
+                  placeholder="(123) 456-7890"
+                  required="Please enter your phone number."
                 />
               </div>
-              <div className="flex space-x-4">
-                <div className="w-1/2">
-                  <Label
-                    htmlFor="firstName"
-                    className="text-gray-300 font-medium"
-                  >
-                    First Name
-                  </Label>
-                  <Input
-                    id="firstName"
-                    type="text"
-                    placeholder="First Name"
-                    className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20 transition-all duration-200"
+
+              <PasswordField
+                name="password"
+                label="Password"
+                placeholder="••••••••"
+                required="Password is required"
+              />
+              <PasswordStrength password={password} />
+              <PasswordField
+                name="confirmPassword"
+                label="Confirm Password"
+                placeholder="••••••••"
+                required="Please confirm your password."
+                validate={(value: any) =>
+                  value === password || "Passwords do not match"
+                }
+              />
+
+              <div className="space-y-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox
+                    id="acceptTerms"
+                    className="border-gray-600 data-[state=checked]:bg-yellow-400 data-[state=checked]:border-yellow-400 mt-1"
                     required
                   />
-                </div>
-                <div className="w-1/2">
                   <Label
-                    htmlFor="secondName"
-                    className="text-gray-300 font-medium"
+                    htmlFor="acceptTerms"
+                    className="text-sm text-gray-300 cursor-pointer leading-relaxed"
                   >
-                    Last Name
+                    I accept the{" "}
+                    <Link
+                      to={"/our-policy"}
+                      className="text-yellow-400 hover:text-yellow-300 underline"
+                    >
+                      terms and conditions
+                    </Link>
+                    and the{" "}
+                    <Link
+                      to={"/privacy"}
+                      className="text-yellow-400 hover:text-yellow-300 underline"
+                    >
+                      privacy policy.
+                    </Link>
                   </Label>
-                  <Input
-                    id="secondName"
-                    type="text"
-                    placeholder="Last Name"
-                    className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20 transition-all duration-200"
-                  />
                 </div>
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-300 font-medium">
-                Password
-              </Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  id="password"
-                  type={visible ? "text" : "password"}
-                  placeholder="••••••••"
-                  className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20 transition-all duration-200"
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <Eye
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 cursor-pointer"
-                  onClick={() => setVisible(!visible)}
-                />
-              </div>
-              <PasswordStrength password={password} />
-            </div>
-            <div className="space-y-2">
-              <Label
-                htmlFor="confirm-password"
-                className="text-gray-300 font-medium"
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black font-semibold py-3 hover:from-yellow-500 hover:to-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
               >
-                Confirm Password
-              </Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  id="confirm-password"
-                  type={visible ? "text" : "password"}
-                  placeholder="••••••••"
-                  className="pl-10 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20 transition-all duration-200"
-                  required
-                />
-                <Eye
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 cursor-pointer"
-                  onClick={() => setVisible(!visible)}
-                />
-              </div>
-            </div>
+                Sign up
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </motion.form>
+          </FormProvider>
 
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="remember"
-                    className="border-gray-600 data-[state=checked]:bg-yellow-400 data-[state=checked]:border-yellow-400"
-                  />
-                  <Label
-                    htmlFor="remember"
-                    className="text-gray-300 text-sm cursor-pointer"
-                  >
-                    Remember me
-                  </Label>
-                </div>
-                <Link
-                  to="/forgot-password"
-                  className="text-medium text-yellow-400 hover:text-gray-300 underline transition-colors"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-            </div>
-          </motion.form>
+          <div className="text-center pt-4">
+            <p className="text-gray-400">
+              You already have an account?{" "}
+              <Link
+                to={"/auth/login"}
+                className="text-yellow-400 hover:text-yellow-300 font-semibold transition-colors"
+              >
+                Sign in here
+              </Link>
+            </p>
+          </div>
         </CardContent>
       </Card>
     </motion.div>

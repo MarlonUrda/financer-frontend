@@ -3,7 +3,7 @@ import { CheckCircle, XCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface PasswordStrengthProps {
-  password: string;
+  password: string | undefined;
   className?: string;
 }
 
@@ -15,23 +15,23 @@ export function PasswordStrength({
     return [
       {
         label: "Al menos 8 caracteres",
-        met: password.length >= 8,
+        met: (password?.length ?? 0) >= 8,
       },
       {
         label: "Una letra mayúscula",
-        met: /[A-Z]/.test(password),
+        met: /[A-Z]/.test(password ?? ""),
       },
       {
         label: "Una letra minúscula",
-        met: /[a-z]/.test(password),
+        met: /[a-z]/.test(password ?? ""),
       },
       {
         label: "Un número",
-        met: /\d/.test(password),
+        met: /\d/.test(password ?? ""),
       },
       {
         label: "Un carácter especial",
-        met: /[!@#$%^&*(),.?\":{}|<>]/.test(password),
+        met: /[!@#$%^&*(),.?\":{}|<>]/.test(password ?? ""),
       },
     ];
   }, [password]);
@@ -64,7 +64,7 @@ export function PasswordStrength({
           transition={{ duration: 0.3, ease: "easeOut" }}
           className={`space-y-3 ${className}`}
         >
-          <div className="space-y-1">
+          <motion.div className="space-y-1">
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Seguridad de la contraseña</span>
               <span className="text-gray-300">{getStrengthLabel()}</span>
@@ -76,9 +76,9 @@ export function PasswordStrength({
                 layout
               />
             </div>
-          </div>
+          </motion.div>
 
-          <div className="space-y-2">
+          <motion.div className="space-y-2">
             {requirements.map((req, index) => (
               <div key={index} className="flex items-center gap-2 text-xs">
                 {req.met ? (
@@ -91,7 +91,7 @@ export function PasswordStrength({
                 </span>
               </div>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
