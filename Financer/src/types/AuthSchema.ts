@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { UserSchema } from "./User";
 
 export interface LoginRequest {
   email: string;
@@ -10,12 +11,25 @@ export const loginRequestSchema = z.object({
   password: z.string().min(6).max(100),
 });
 
-export const LoginResponseSchema = z.object({
+export const LoginSuccessResponseSchema = z.object({
+  token: z.string(),
   success: z.boolean(),
   message: z.string().min(2).max(100),
-  code: z.number(),
-  token: z.string(),
 });
+
+export type LoginSuccessResponse = z.infer<typeof LoginSuccessResponseSchema>;
+
+export const LoginErrorResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string(),
+});
+
+export type LoginErrorResponse = z.infer<typeof LoginErrorResponseSchema>;
+
+export const LoginResponseSchema = z.union([
+  LoginSuccessResponseSchema,
+  LoginErrorResponseSchema,
+]);
 
 export type LoginResponse = z.infer<typeof LoginResponseSchema>;
 
@@ -25,14 +39,31 @@ export interface RegisterRequest {
   lname: string;
   phone: string;
   password: string;
+  created_at: string;
   role_id: number;
 }
 
-export const RegisterResponseSchema = z.object({
+export const RegisterSuccessResponseSchema = z.object({
+  success: z.boolean(),
+  user: UserSchema,
+  message: z.string().min(2).max(100),
+});
+
+export type RegisterSuccessResponse = z.infer<
+  typeof RegisterSuccessResponseSchema
+>;
+
+export const RegisterErrorResponseSchema = z.object({
   success: z.boolean(),
   message: z.string().min(2).max(100),
-  code: z.number(),
 });
+
+export type RegisterErrorResponse = z.infer<typeof RegisterErrorResponseSchema>;
+
+export const RegisterResponseSchema = z.union([
+  RegisterSuccessResponseSchema,
+  RegisterErrorResponseSchema,
+]);
 
 export type RegisterResponse = z.infer<typeof RegisterResponseSchema>;
 
@@ -84,4 +115,6 @@ export const ChangePasswordResponseSchema = z.object({
   code: z.number(),
 });
 
-export type ChangePasswordResponse = z.infer<typeof ChangePasswordResponseSchema>;
+export type ChangePasswordResponse = z.infer<
+  typeof ChangePasswordResponseSchema
+>;

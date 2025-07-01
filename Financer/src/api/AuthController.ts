@@ -5,11 +5,11 @@ import {
   type ChangePasswordResponse,
   ChangePasswordResponseSchema,
   type LoginRequest,
-  type LoginResponse,
   LoginResponseSchema,
+  type LoginResponse,
   type RegisterRequest,
-  type RegisterResponse,
   RegisterResponseSchema,
+  type RegisterResponse,
   type VerifyCodeRequest,
   type VerifyCodeResponse,
   VerifyCodeResponseSchema,
@@ -19,7 +19,7 @@ import {
 } from "../types/AuthSchema";
 
 export default class AuthController {
-  static async login(payload: LoginRequest) {
+  static async login(payload: LoginRequest): Promise<LoginResponse> {
     try {
       const res = await superFetch<LoginRequest, LoginResponse, "login">({
         options: {
@@ -30,17 +30,18 @@ export default class AuthController {
         payload: payload,
       });
 
-      return res
+      console.log(res);
+
+      return res;
     } catch (error) {
-      if (error instanceof SuperFetchError) {
-        console.log("Error en la solicitud:", error.message);
-      } else {
-        console.log("Error inesperado:", error);
-      }
+      const sf = error as SuperFetchError;
+      console.log("Error en la solicitud:", sf.message);
+      console.log("Código de error:", sf.code);
+      throw new SuperFetchError(sf.message, sf.code);
     }
   }
 
-  static async register(payload: RegisterRequest) {
+  static async register(payload: RegisterRequest): Promise<RegisterResponse> {
     try {
       const res = await superFetch<
         RegisterRequest,
@@ -55,79 +56,98 @@ export default class AuthController {
         payload: payload,
       });
 
-      return res
+      console.log(res);
+
+      return res;
     } catch (error) {
-      if (error instanceof SuperFetchError) {
-        console.log("Error en la solicitud:", error.message);
-      } else {
-        console.log("Error inesperado:", error);
-      }
+      const sf = error as SuperFetchError;
+      console.log("Error en la solicitud:", sf.message);
+      console.log("Código de error:", sf.code);
+      throw new SuperFetchError(sf.message, sf.code);
     }
   }
 
-  static async SendEmail(payload: VerifyEmailRequest): Promise<VerifyEmailResponse> {
+  static async SendEmail(
+    payload: VerifyEmailRequest
+  ): Promise<VerifyEmailResponse> {
     try {
-      const res = await superFetch<VerifyEmailRequest, VerifyEmailResponse, "sendEmail">({
+      const res = await superFetch<
+        VerifyEmailRequest,
+        VerifyEmailResponse,
+        "sendEmail"
+      >({
         options: {
-          method: "POST"
+          method: "POST",
         },
         route: "sendEmail",
         responseSchema: VerifyEmailResponseSchema,
-        payload: payload
-      })
+        payload: payload,
+      });
 
-      console.log(res)
+      console.log(res);
 
-      return res
+      return res;
     } catch (error) {
-      const sf = error as SuperFetchError
-      console.log("Error en la solicitud:", sf.message)
-      console.log("Código de error:", sf.code)
-      throw new SuperFetchError(sf.message, sf.code)
+      const sf = error as SuperFetchError;
+      console.log("Error en la solicitud:", sf.message);
+      console.log("Código de error:", sf.code);
+      throw new SuperFetchError(sf.message, sf.code);
     }
   }
 
-  static async VerifyCode(payload: VerifyCodeRequest): Promise<VerifyCodeResponse> {
+  static async VerifyCode(
+    payload: VerifyCodeRequest
+  ): Promise<VerifyCodeResponse> {
     try {
-      const res = await superFetch<VerifyCodeRequest, VerifyCodeResponse, "verify">({
+      const res = await superFetch<
+        VerifyCodeRequest,
+        VerifyCodeResponse,
+        "verify"
+      >({
         options: {
-          method: "POST"
+          method: "POST",
         },
         route: "verify",
         responseSchema: VerifyCodeResponseSchema,
-        payload: payload  
-      })
+        payload: payload,
+      });
 
-      console.log(res)
+      console.log(res);
 
-      return res
+      return res;
     } catch (error) {
-      const sf = error as SuperFetchError
-      console.log("Error en la solicitud:", sf.message)
-      console.log("Código de error:", sf.code)
-      throw new SuperFetchError(sf.message, sf.code)
+      const sf = error as SuperFetchError;
+      console.log("Error en la solicitud:", sf.message);
+      console.log("Código de error:", sf.code);
+      throw new SuperFetchError(sf.message, sf.code);
     }
   }
 
-  static async ChangePassword(payload: ChangePasswordRequest): Promise<ChangePasswordResponse> {
+  static async ChangePassword(
+    payload: ChangePasswordRequest
+  ): Promise<ChangePasswordResponse> {
     try {
-      const res = await superFetch<ChangePasswordRequest, ChangePasswordResponse, "changePassword">({
+      const res = await superFetch<
+        ChangePasswordRequest,
+        ChangePasswordResponse,
+        "changePassword"
+      >({
         options: {
-          method: "POST"
+          method: "POST",
         },
         route: "changePassword",
         responseSchema: ChangePasswordResponseSchema,
-        payload: payload
-      })
+        payload: payload,
+      });
 
-      console.log(res)
+      console.log(res);
 
-      return res
+      return res;
     } catch (error) {
-      const sf = error as SuperFetchError
-      console.log("Error en la solicitud:", sf.message)
-      console.log("Código de error:", sf.code)
-      throw new SuperFetchError(sf.message, sf.code)
+      const sf = error as SuperFetchError;
+      console.log("Error en la solicitud:", sf.message);
+      console.log("Código de error:", sf.code);
+      throw new SuperFetchError(sf.message, sf.code);
     }
   }
 }

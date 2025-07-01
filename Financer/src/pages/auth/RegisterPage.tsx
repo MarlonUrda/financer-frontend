@@ -53,6 +53,7 @@ export default function RegisterPage() {
       email: email,
       phone: phone,
       password: password,
+      created_at: new Date().toISOString(),
       role_id: 2,
     });
   });
