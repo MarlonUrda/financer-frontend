@@ -6,6 +6,12 @@ export const apiRoutes = {
   sendEmail: () => `${server}/auth/send`,
   changePassword: () => `${server}/auth/change-password`,
   verify: () => `${server}/auth/verify`,
+
+  //PaymentTypes routes
+  getAllTypes: () => `${server}/pay-types`,
+  getSingleType: (id: string) => `${server}/pay-types/${id}`,
+  new: () => `${server}/pay-types/new`,
+  deleteOne: (id: string) => `${server}/pay-types/${id}`
 }
 
 export type ApiRoutes = typeof apiRoutes;
