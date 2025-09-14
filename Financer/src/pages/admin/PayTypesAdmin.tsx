@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { useMutation } from "@tanstack/react-query";
 import { PaymentTypesController } from "../../api/PaymentTypesController";
 import type { PaymentType } from "../../types/AdminSchemas/PaymentTypes";
+import { PaymentTypeBoard } from "../../components/app/PaymentTable";
 
 export const PayTypesScreen = () => {
   const inp = {
@@ -83,24 +84,14 @@ export const PayTypesScreen = () => {
             Manage and configure the payment types of the app
           </CardDescription>
           <CardContent>
-            <motion.div className="flex items-center justify-center pt-4">
+            <motion.div className="flex flex-col items-center justify-center pt-4 gap-6">
               <InputDialog
                 triggerText="Add Payment Type"
                 title="New Payment Type"
                 inputParam={inp}
                 OnSubmit={handleData}
               />
-              {types.length > 0 ? (
-                types.map((type) => (
-                  <motion.div key={type.id} className="text-amber-50 px-2 py-1">
-                    {type.type}
-                  </motion.div>
-                ))
-              ) : (
-                <motion.div className="text-amber-50 px-2 py-1">
-                  No payment types available
-                </motion.div>
-              )}
+              <PaymentTypeBoard paymentTypes={types} />
             </motion.div>
           </CardContent>
         </CardHeader>
