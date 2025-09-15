@@ -12,6 +12,7 @@ import { Input } from "../ui/input";
 import { motion } from "framer-motion";
 import { Label } from "../ui/label";
 import { useCallback, useState } from "react";
+import { set } from "react-hook-form";
 
 interface InputParam {
   label: string;
@@ -23,39 +24,55 @@ interface InputDialogProps {
   triggerText: string;
   title: string;
   inputParam: InputParam | InputParam[];
-  OnSubmit?: (values: { [key: string]: string }) => void 
+  OnSubmit?: (values: { [key: string]: string }) => void;
 }
 
 export const InputDialog = ({
   triggerText,
   title,
   inputParam,
-  OnSubmit
+  OnSubmit,
 }: InputDialogProps) => {
-  const initialValues = Array.isArray(inputParam) ? inputParam.reduce((acc, param) => ({ ...acc, [param.id]: "" }), {}) : { [inputParam.id]: "" };
+  const initialValues = Array.isArray(inputParam)
+    ? inputParam.reduce((acc, param) => ({ ...acc, [param.id]: "" }), {})
+    : { [inputParam.id]: "" };
 
   const [val, setVal] = useState<{ [key: string]: string }>(initialValues);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleChange = useCallback((id: string, value: string) => {
     setVal((prev) => ({ ...prev, [id]: value }));
-  }, [])
+  }, []);
 
-  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const pure = Object.values(val).filter((v) => v.trim() !== "");
-    console.log("Filtered Value:", pure);
-    OnSubmit?.(val)
-  }, [val, OnSubmit])
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const pure = Object.values(val).filter((v) => v.trim() !== "");
+      console.log("Filtered Value:", pure);
+      setOpen(false);
+      OnSubmit?.(val);
+    },
+    [val, OnSubmit]
+  );
 
   const resetForm = useCallback(() => {
-    setVal(initialValues)
-  }, [initialValues])
+    setVal(initialValues);
+  }, [initialValues]);
 
   return (
     <motion.div>
-      <Dialog onOpenChange={(open) => !open && resetForm()}>
+      <Dialog
+        open={open}
+        onOpenChange={(o) => {
+          setOpen(o);
+          if (!o) resetForm();
+        }}
+      >
         <DialogTrigger asChild>
-          <Button variant="outline" className="text-amber-50">
+          <Button
+            variant="outline"
+            className="text-amber-50 hover:cursor-pointer"
+          >
             {triggerText}
           </Button>
         </DialogTrigger>
@@ -104,11 +121,18 @@ export const InputDialog = ({
             </motion.div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline" className="text-amber-50">
+                <Button
+                  variant="outline"
+                  className="text-amber-50 hover:cursor-pointer"
+                >
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" className="text-amber-50">
+
+              <Button
+                type="submit"
+                className="text-amber-50 hover:cursor-pointer"
+              >
                 Create Type
               </Button>
             </DialogFooter>

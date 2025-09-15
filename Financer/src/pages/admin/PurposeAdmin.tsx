@@ -9,58 +9,60 @@ import {
 } from "../../components/ui/card";
 import { motion } from "framer-motion";
 import { useMutation } from "@tanstack/react-query";
-import { PaymentTypesController } from "../../api/PaymentTypesController";
-import type { PaymentType } from "../../types/AdminSchemas/PaymentTypes";
-import { PaymentTypeBoard } from "../../components/app/PaymentTable";
+import type { Purpose } from "../../types/AdminSchemas/Purpose";
+import PurposeController from "../../api/PurposeController";
+import { PurposeBoard } from "../../components/app/PurposeTable";
 
-export const PayTypesScreen = () => {
+export const PurposesScreen = () => {
   const inp = {
-    label: "New Type",
-    placeholder: "Enter payment type",
-    id: "type",
+    label: "New Purpose",
+    placeholder: "Groseries...",
+    id: "name",
   };
 
   // const [data, setData] = useState<{ [key: string]: string } | null>(null);
-  const [types, setTypes] = useState<PaymentType[]>([]);
+  const [purposes, setPurposes] = useState<Purpose[]>([]);
 
-  const fetchTypes = useMutation({
-    mutationFn: PaymentTypesController.getAllTypes,
+  const fetchPurposes = useMutation({
+    mutationFn: PurposeController.getAllPurposes,
     onSuccess: (data) => {
-      setTypes(data);
+      setPurposes(data.purposes);
     },
     onError: (error) => {
-      console.error("Error fetching payment types:", error);
+      console.error("Error fetching purposes from db:", error);
     },
   });
 
-  const sendTypetoAPI = useMutation({
-    mutationFn: PaymentTypesController.newType,
+  const sendPurposetoAPI = useMutation({
+    mutationFn: PurposeController.AddNewPurpose,
     onSuccess: (data) => {
-      console.log("New payment type created:", data);
+      console.log("New purpose saved:", data);
     },
     onError: (error) => {
-      console.error("Error creating new payment type:", error);
+      console.error("Error adding new purpose:", error);
     },
   });
 
   useEffect(() => {
-    fetchTypes.mutate();
+    fetchPurposes.mutate();
   }, []);
 
   const handleData = (val: { [key: string]: string }) => {
     console.log("Input Value from Parent:", JSON.stringify(val));
 
-    const newType = val.type.trim();
+    const newPurpose = val.name.trim();
 
-    const tempType: PaymentType = {
+    const tempPurpose: Purpose = {
       id: 2,
-      type: newType,
+      name: newPurpose,
     };
 
-    setTypes((prev) => [...prev, tempType]);
+    console.log("NEW PURPOSE: ", tempPurpose);
+
+    setPurposes((prev) => [...prev, tempPurpose]);
 
     try {
-      sendTypetoAPI.mutate({ type: newType });
+      sendPurposetoAPI.mutate({ name: newPurpose });
     } catch (error) {
       console.error("Error sending payment type to API:", error);
     }
@@ -78,20 +80,20 @@ export const PayTypesScreen = () => {
       <Card className="bg-gray-900 border-gray-800 backdrop-blur-sm shadow-2xl w-[100%]">
         <CardHeader className="space-y-1 pb-6">
           <CardTitle className="text-2xl font-bold text-amber-50 text-center">
-            Admin Payment Types
+            Admin Purposes
           </CardTitle>
           <CardDescription className="text-sm text-gray-400 text-center">
-            Manage and configure the payment types of the app
+            Manage and configure the payment purposes of the app
           </CardDescription>
           <CardContent>
             <motion.div className="flex flex-col items-center justify-center pt-4 gap-6">
               <InputDialog
-                triggerText="Add Payment Type"
-                title="New Payment Type"
+                triggerText="Add New Purpose"
+                title="New Purpose"
                 inputParam={inp}
                 OnSubmit={handleData}
               />
-              <PaymentTypeBoard paymentTypes={types} setTypes={setTypes} />
+              <PurposeBoard purposes={purposes} setPurposes={setPurposes} />
             </motion.div>
           </CardContent>
         </CardHeader>

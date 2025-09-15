@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query";
-import type { PaymentType } from "../../types/AdminSchemas/PaymentTypes";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -11,19 +10,20 @@ import {
   TableRow,
 } from "../ui/table";
 import { motion } from "framer-motion";
-import { PaymentTypesController } from "../../api/PaymentTypesController";
+import type { Purpose } from "../../types/AdminSchemas/Purpose";
+import PurposeController from "../../api/PurposeController";
 import type React from "react";
 
-interface PaymentTypeBoardProps {
-  paymentTypes: PaymentType[];
-  setTypes: React.Dispatch<React.SetStateAction<PaymentType[]>>
+interface PurposeTableProp {
+  purposes: Purpose[],
+  setPurposes: React.Dispatch<React.SetStateAction<Purpose[]>>
 }
 
-export const PaymentTypeBoard = ({ paymentTypes, setTypes }: PaymentTypeBoardProps) => {
+export const PurposeBoard = ({ purposes, setPurposes }: PurposeTableProp) => {
   const deleteMutation = useMutation({
-    mutationFn: PaymentTypesController.deleteType,
+    mutationFn: PurposeController.DeletePurpose,
     onSuccess: (data) => {
-      setTypes(prev => prev.filter(pt => pt.id !== data.id))
+      setPurposes((prev) => prev.filter((p) => p.id !== data.id));
       console.log(data.message);
     },
     onError: (error) => {
@@ -38,27 +38,27 @@ export const PaymentTypeBoard = ({ paymentTypes, setTypes }: PaymentTypeBoardPro
   return (
     <Table className="bg-gray-800">
       <TableCaption className="text-gray-400 font-bold pt-5">
-        Payment Types saved on database
+        Purposes saved on database
       </TableCaption>
       <TableHeader>
         <TableRow className="font-bold text-amber-50 text-center">
-          <TableHead className="w-[200px] font-bold">Payment Type</TableHead>
+          <TableHead className="w-[200px] font-bold">Purpose</TableHead>
           <TableHead className="text-center font-bold">Options</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {paymentTypes && paymentTypes.length > 0 ? (
-          paymentTypes.map((pt) => (
-            <TableRow key={pt.id}>
+        {purposes && purposes.length > 0 ? (
+          purposes.map((p) => (
+            <TableRow key={p.id}>
               <TableCell className="text-amber-50 text-left">
-                {pt.type}
+                {p.name}
               </TableCell>
               <TableCell>
                 <motion.div className="flex flex-row justify-between gap-4">
                   <Button
                     variant="outline"
                     className="text-amber-50 bg-red-700 hover:bg-red-900 hover:cursor-pointer"
-                    onClick={() => handleDelete(pt.id.toString())}
+                    onClick={() => handleDelete(p.id.toString())}
                   >
                     Delete
                   </Button>
@@ -69,7 +69,7 @@ export const PaymentTypeBoard = ({ paymentTypes, setTypes }: PaymentTypeBoardPro
         ) : (
           <motion.div className="flex-1 items-center justify-center py-12">
             <p className="text-2xl font-bold text-amber-50 text-center">
-              No payment types found.
+              No Purposes in db found.
             </p>
           </motion.div>
         )}

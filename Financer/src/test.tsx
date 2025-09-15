@@ -1,13 +1,12 @@
-import { motion } from "framer-motion"
-import { Button } from "./components/ui/button"
-import { Link, useRouter } from "@tanstack/react-router"
+import { motion } from "framer-motion";
+import { Button } from "./components/ui/button";
+import { Link, useRouter } from "@tanstack/react-router";
 
 export const TestPanel = () => {
-
-  const router = useRouter()
+  const router = useRouter();
 
   return (
-    <motion.div 
+    <motion.div
       layout
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -20,7 +19,12 @@ export const TestPanel = () => {
             Payment Types
           </Link>
         </Button>
+        <Button variant="outline">
+          <Link to="/admin/purpose" className="text-amber-50">
+            Purpose
+          </Link>
+        </Button>
       </motion.div>
     </motion.div>
-  )
-}
+  );
+};

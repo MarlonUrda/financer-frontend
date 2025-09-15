@@ -13,6 +13,7 @@ import ChangePasswordPage from "./pages/auth/ChangePassword";
 import AdminLayout from "./pages/admin/AdminLayout";
 import { PayTypesScreen } from "./pages/admin/PayTypesAdmin";
 import { TestPanel } from "./test";
+import { PurposesScreen } from "./pages/admin/PurposeAdmin";
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,
@@ -67,10 +68,17 @@ const changePasswordRoute = createRoute({
   component: ChangePasswordPage,
 });
 
+//Admin Routes: /admin/<route>
 const adminPayTypesRoute = createRoute({
   getParentRoute: () => adminRoute,
   path: "/payment-types",
   component: PayTypesScreen,
+});
+
+const adminPurposesRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/purpose",
+  component: PurposesScreen,
 });
 
 const routeTree = rootRoute.addChildren([
@@ -82,7 +90,7 @@ const routeTree = rootRoute.addChildren([
     verifyRoute,
     changePasswordRoute,
   ]),
-  adminRoute.addChildren([adminPayTypesRoute]),
+  adminRoute.addChildren([adminPayTypesRoute, adminPurposesRoute]),
 ]);
 
 export const router = new Router({

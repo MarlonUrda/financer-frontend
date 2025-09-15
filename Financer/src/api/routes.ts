@@ -11,8 +11,14 @@ export const apiRoutes = {
   getAllTypes: () => `${server}/pay-types`,
   getSingleType: (id: string) => `${server}/pay-types/${id}`,
   new: () => `${server}/pay-types/new`,
-  deleteOne: (id: string) => `${server}/pay-types/${id}`
-}
+  deleteOne: (id: string) => `${server}/pay-types/${id}`,
+
+  //Purposes routes
+  getAllPurposes: () => `${server}/purpose`,
+  getSinglePurpose: (id: string) => `${server}/purpose/${id}`,
+  addNewPurpose: () => `${server}/purpose/add`,
+  deletePurpose: (id: string) => `${server}/purpose/${id}`,
+};
 
 export type ApiRoutes = typeof apiRoutes;
 export type ApiRoute = keyof ApiRoutes;

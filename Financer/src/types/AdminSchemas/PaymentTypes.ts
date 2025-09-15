@@ -2,21 +2,21 @@ import { z } from "zod";
 
 export const PaymentTypeSchema = z.object({
   id: z.number(),
-  type: z.string()
+  type: z.string(),
 });
 
 export interface PaymentType {
-  id: number
+  id: number;
   type: string;
 }
 
-export const AllTypesResponseSchema = z.array(PaymentTypeSchema)
+export const AllTypesResponseSchema = z.array(PaymentTypeSchema);
 
 export type AllTypesResponse = z.infer<typeof AllTypesResponseSchema>;
 
 export const SingleTypeResponseSchema = z.object({
-  type: PaymentTypeSchema
-})
+  type: PaymentTypeSchema,
+});
 
 export type SingleTypeResponse = z.infer<typeof SingleTypeResponseSchema>;
 
@@ -26,14 +26,17 @@ export interface NewPaymentTypeRequest {
 
 export const NewPaymentResponseSchema = z.object({
   message: z.string(),
-  success: z.boolean()
-})
+  success: z.boolean(),
+});
 
-export type NewPaymentResponse = z.infer<typeof NewPaymentResponseSchema>
+export type NewPaymentResponse = z.infer<typeof NewPaymentResponseSchema>;
 
 export const DeletePaymentTypeResponseSchema = z.object({
   message: z.string(),
-  success: z.boolean()
-})
+  success: z.boolean(),
+  id: z.number(),
+});
 
-export type DeletePaymentTypeResponse = z.infer<typeof DeletePaymentTypeResponseSchema>
+export type DeletePaymentTypeResponse = z.infer<
+  typeof DeletePaymentTypeResponseSchema
+>;
