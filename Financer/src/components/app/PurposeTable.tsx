@@ -15,8 +15,8 @@ import PurposeController from "../../api/PurposeController";
 import type React from "react";
 
 interface PurposeTableProp {
-  purposes: Purpose[],
-  setPurposes: React.Dispatch<React.SetStateAction<Purpose[]>>
+  purposes: Purpose[];
+  setPurposes: React.Dispatch<React.SetStateAction<Purpose[]>>;
 }
 
 export const PurposeBoard = ({ purposes, setPurposes }: PurposeTableProp) => {
@@ -53,16 +53,14 @@ export const PurposeBoard = ({ purposes, setPurposes }: PurposeTableProp) => {
               <TableCell className="text-amber-50 text-left">
                 {p.name}
               </TableCell>
-              <TableCell>
-                <motion.div className="flex flex-row justify-between gap-4">
-                  <Button
-                    variant="outline"
-                    className="text-amber-50 bg-red-700 hover:bg-red-900 hover:cursor-pointer"
-                    onClick={() => handleDelete(p.id.toString())}
-                  >
-                    Delete
-                  </Button>
-                </motion.div>
+              <TableCell className="flex justify-center items-center">
+                <Button
+                  variant="outline"
+                  className="text-amber-50 bg-red-700 hover:bg-red-900 hover:cursor-pointer"
+                  onClick={() => handleDelete(p.id.toString())}
+                >
+                  Delete
+                </Button>
               </TableCell>
             </TableRow>
           ))

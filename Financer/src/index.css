@@ -1,5 +1,13 @@
+@import url("https://www.google.com/search?q=https://fonts.googleapis.com/css2%3Ffamily%3DPlus%2BJakarta%2BSans:ital,wght%400,200..800%3B1,200..800%26family%3DMontserrat:ital,wght%400,100..900%3B1,100..900%26family%3DPlayfair%2BDisplay:ital,wght%400,400..900%3B1,400..900%26family%3DPrata%26family%3DInter%26family%3DBebas%2BNeue%26family%3DPoppins:ital,wght%400,100%3B0,200%3B0,300%3B0,400%3B0,500%3B0,600%3B0,700%3B0,800%3B0,900%3B1,100%3B1,200%3B1,300%3B1,400%3B1,500%3B1,600%3B1,700%3B1,800%3B1,900%26display%3Dswap");
+
+@import url("https://fonts.googleapis.com/css2?family=Cookie&display=swap");
+
 @import "tailwindcss";
 @import "tw-animate-css";
+
+* {
+  font-family: "inter", "Plus Jakarta Sans", "poppins", sans-serif;
+}
 
 :root {
   --radius: 0.625rem;
@@ -111,7 +119,7 @@
     outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
   }
   body {
-    background-color: var(--background);
+    background-color: var(--card);
     color: var(--foreground);
   }
 }

@@ -36,13 +36,13 @@ export const PaymentTypeBoard = ({ paymentTypes, setTypes }: PaymentTypeBoardPro
   };
 
   return (
-    <Table className="bg-gray-800">
+    <Table className="bg-zinc-100 rounded-lg w-full">
       <TableCaption className="text-gray-400 font-bold pt-5">
         Payment Types saved on database
       </TableCaption>
       <TableHeader>
-        <TableRow className="font-bold text-amber-50 text-center">
-          <TableHead className="w-[200px] font-bold">Payment Type</TableHead>
+        <TableRow className="font-bold text-zinc-800 text-center">
+          <TableHead className="w-[200px] font-bold text-center">Payment Type</TableHead>
           <TableHead className="text-center font-bold">Options</TableHead>
         </TableRow>
       </TableHeader>
@@ -50,25 +50,23 @@ export const PaymentTypeBoard = ({ paymentTypes, setTypes }: PaymentTypeBoardPro
         {paymentTypes && paymentTypes.length > 0 ? (
           paymentTypes.map((pt) => (
             <TableRow key={pt.id}>
-              <TableCell className="text-amber-50 text-left">
+              <TableCell className="text-zinc-700 text-center">
                 {pt.type}
               </TableCell>
-              <TableCell>
-                <motion.div className="flex flex-row justify-between gap-4">
+              <TableCell className="flex justify-center items-center">
                   <Button
                     variant="outline"
-                    className="text-amber-50 bg-red-700 hover:bg-red-900 hover:cursor-pointer"
+                    className="text-red-500 bg-red-50 hover:bg-red-100 hover:cursor-pointer transition-colors duration-100 ease-in"
                     onClick={() => handleDelete(pt.id.toString())}
                   >
                     Delete
                   </Button>
-                </motion.div>
               </TableCell>
             </TableRow>
           ))
         ) : (
-          <motion.div className="flex-1 items-center justify-center py-12">
-            <p className="text-2xl font-bold text-amber-50 text-center">
+          <motion.div className="flex items-center justify-center py-12">
+            <p className="text-2xl font-bold text-zinc-900 text-center">
               No payment types found.
             </p>
           </motion.div>

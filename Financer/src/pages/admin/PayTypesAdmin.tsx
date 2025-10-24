@@ -75,12 +75,12 @@ export const PayTypesScreen = () => {
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="flex items-center justify-center min-h-screen"
     >
-      <Card className="bg-gray-900 border-gray-800 backdrop-blur-sm shadow-2xl w-[100%]">
+      <Card className="bg-white backdrop-blur-sm shadow-2xl w-[100%]">
         <CardHeader className="space-y-1 pb-6">
-          <CardTitle className="text-2xl font-bold text-amber-50 text-center">
+          <CardTitle className="text-2xl font-bold text-zinc-900 text-center">
             Admin Payment Types
           </CardTitle>
-          <CardDescription className="text-sm text-gray-400 text-center">
+          <CardDescription className="text-sm text-zinc-500 text-center">
             Manage and configure the payment types of the app
           </CardDescription>
           <CardContent>

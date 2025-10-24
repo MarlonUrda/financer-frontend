@@ -18,6 +18,11 @@ export const apiRoutes = {
   getSinglePurpose: (id: string) => `${server}/purpose/${id}`,
   addNewPurpose: () => `${server}/purpose/add`,
   deletePurpose: (id: string) => `${server}/purpose/${id}`,
+
+  //Currency Routes
+  getAllCurrencies: () => `${server}/currency`,
+  newCurrency: () => `${server}/currency`,
+  deleteCurrency: (id: string) => `${server}/currency/${id}`,
 };
 
 export type ApiRoutes = typeof apiRoutes;

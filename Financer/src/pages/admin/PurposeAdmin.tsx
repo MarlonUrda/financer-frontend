@@ -77,7 +77,7 @@ export const PurposesScreen = () => {
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="flex items-center justify-center min-h-screen"
     >
-      <Card className="bg-gray-900 border-gray-800 backdrop-blur-sm shadow-2xl w-[100%]">
+      <Card className="bg-white border-gray-800 backdrop-blur-sm shadow-2xl w-[100%]">
         <CardHeader className="space-y-1 pb-6">
           <CardTitle className="text-2xl font-bold text-amber-50 text-center">
             Admin Purposes

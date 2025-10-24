@@ -12,7 +12,6 @@ import { Input } from "../ui/input";
 import { motion } from "framer-motion";
 import { Label } from "../ui/label";
 import { useCallback, useState } from "react";
-import { set } from "react-hook-form";
 
 interface InputParam {
   label: string;
@@ -71,14 +70,14 @@ export const InputDialog = ({
         <DialogTrigger asChild>
           <Button
             variant="outline"
-            className="text-amber-50 hover:cursor-pointer"
+            className="text-amber-50 bg-zinc-900 hover:bg-zinc-700 hover:ring-zinc-900 hover:cursor-pointer transition-colors duration-100 ease-in"
           >
             {triggerText}
           </Button>
         </DialogTrigger>
-        <DialogContent className="bg-black">
+        <DialogContent className="bg-white shadow-2xl">
           <DialogHeader>
-            <DialogTitle className="text-amber-50 text-center font-bold">
+            <DialogTitle className="text-zinc-900 text-center font-bold">
               {title}
             </DialogTitle>
           </DialogHeader>
@@ -87,7 +86,7 @@ export const InputDialog = ({
               {Array.isArray(inputParam) ? (
                 inputParam.map((param) => (
                   <motion.div
-                    className="grid gap-3 text-amber-50"
+                    className="grid gap-3 text-zinc-800"
                     key={param.id}
                   >
                     <Label htmlFor={param.id}>{param.label}</Label>
@@ -95,7 +94,7 @@ export const InputDialog = ({
                       id={param.id}
                       name={param.id}
                       placeholder={param.placeholder}
-                      className=" focus:border-amber-500 focus:ring-amber-500"
+                      className=" focus:border-zinc-800 focus:ring-zinc-800"
                       value={val[param.id]}
                       onChange={(e) => handleChange(param.id, e.target.value)}
                       required
@@ -103,13 +102,15 @@ export const InputDialog = ({
                   </motion.div>
                 ))
               ) : (
-                <motion.div className="grid gap-3 text-amber-50">
-                  <Label htmlFor={inputParam.id}>{inputParam.label}</Label>
+                <motion.div className="grid gap-3 text-zinc-900">
+                  <Label htmlFor={inputParam.id} className="font-semibold">
+                    {inputParam.label}
+                  </Label>
                   <Input
                     id={inputParam.id}
                     name={inputParam.id}
                     placeholder={inputParam.placeholder || ""}
-                    className=" focus:border-amber-500 focus:ring-amber-500"
+                    className=" focus:border-zinc-600 focus:ring-zinc-500"
                     onChange={(e) =>
                       handleChange(inputParam.id, e.target.value)
                     }
@@ -123,7 +124,7 @@ export const InputDialog = ({
               <DialogClose asChild>
                 <Button
                   variant="outline"
-                  className="text-amber-50 hover:cursor-pointer"
+                  className="text-red-500 bg-red-50 hover:bg-red-100 hover:cursor-pointer transition-colors duration-100 ease-in"
                 >
                   Cancel
                 </Button>
@@ -131,7 +132,7 @@ export const InputDialog = ({
 
               <Button
                 type="submit"
-                className="text-amber-50 hover:cursor-pointer"
+                className="text-amber-50 hover:cursor-pointer bg-zinc-700 hover:bg-zinc-600 hover:ring-zinc-900 transition-colors duration-100 ease-in"
               >
                 Create Type
               </Button>
